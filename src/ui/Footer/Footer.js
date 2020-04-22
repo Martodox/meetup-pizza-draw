@@ -1,28 +1,20 @@
-import React, { useState } from 'react';
-import './App.css';
-import { useLocalStorage } from './useLocalStorage';
-import DrawInProgress from './ui/DrawInProgress/DrawInProgress';
-import EnterDraw from './ui/EnterDraw/EnterDraw'
+import React from 'react';
+import './Footer.css';
 import { Text } from 'office-ui-fabric-react';
+import logo from './logo.png'
 
 
 
-function App() {
+function Footer() {
 
-
-  const [ token, setToken ] = useLocalStorage("drawToken", "");
-
-  
   return (
-    <div className="App">
-
-      <Text variant={"xxLarge"}>Meetjs Pizza draw</Text>
-
-      {token && <DrawInProgress token={token}/>}
-      {!token && <EnterDraw  onDrawEnter={setToken}/>}
-
+    <div>
+      <Text variant="large" className="Sponsor">
+        Food brought to you by:  <img alt="logo" className="Logo" src={logo}></img>
+      </Text>
+      
     </div>
   );
 }
 
-export default App;
+export default Footer;

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './DrawInProgress.css';
-
+import Won from './Won/Won';
+import Lost from './Lost/Lost';
 import { useFirebase } from '../../useFirebase';
-import { useLocalStorage } from '../../useLocalStorage';
+import { WAITING, WON, NOTTHISTIME } from '../../drawStages';
 
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
-import { PrimaryButton, Text, TextField, Spinner } from 'office-ui-fabric-react';
+import { Spinner } from 'office-ui-fabric-react';
 
 
 
@@ -14,23 +15,18 @@ function DrawInProgress({token}) {
 
   const { firebase } = useFirebase();
 
-  const [value, loading, error] = useDocument(
+  const [value] = useDocumentData(
     firebase.firestore().doc(`tokens/${token}`),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
-
+  
   return (
-    <div className="Text">
-        <Text>Draw in progress</Text>
-
-
-        <p>
-        {error && <strong>Error: {JSON.stringify(error)}</strong>}
-        {loading && <span>Document: Loading...</span>}
-        {value && <span>Document: {JSON.stringify(value.data())}</span>}
-      </p>
+    <div className="DrawInProgress">
+      {value && value.hasWon === WAITING && <Spinner label={`${value.nickname} please wait for the results`} />}
+      {value && value.hasWon === WON && <Won session={value} /> }
+      {value && value.hasWon === NOTTHISTIME && <Lost session={value}/> }
 
     </div>
   );

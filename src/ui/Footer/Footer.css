@@ -1,5 +1,9 @@
-.App {
-  max-width: 500px;
-  margin: 50px auto;
+.Sponsor {
+  display: flex;
+  align-items: center;
+}
+.Logo {
+  width: 150px;
+  padding-left: 10px;
 }
 
