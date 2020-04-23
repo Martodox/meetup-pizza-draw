@@ -7,7 +7,7 @@ function Rules() {
 
   return (
     <div>
-
+        <Text variant={"xLarge"}>Live coding</Text>
       <Text variant={"xLarge"}>Rules</Text>
       <Text variant={"medium"}>
         <p>
