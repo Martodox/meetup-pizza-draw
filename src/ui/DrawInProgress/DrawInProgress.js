@@ -7,26 +7,31 @@ import { WAITING, WON, NOTTHISTIME } from '../../drawStages';
 
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 
-import { Spinner } from 'office-ui-fabric-react';
+import { Spinner, PrimaryButton } from 'office-ui-fabric-react';
 
 
 
-function DrawInProgress({token}) {
+function DrawInProgress({token, onReset}) {
 
   const { firebase } = useFirebase();
 
-  const [value] = useDocumentData(
+  const [value, loading] = useDocumentData(
     firebase.firestore().doc(`tokens/${token}`),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
-  
+
   return (
     <div className="DrawInProgress">
       {value && value.hasWon === WAITING && <Spinner label={`${value.nickname} please wait for the results`} />}
       {value && value.hasWon === WON && <Won session={value} /> }
       {value && value.hasWon === NOTTHISTIME && <Lost session={value}/> }
+      {!loading && !value && <PrimaryButton 
+        
+        text="Reset" 
+        onClick={onReset} 
+      />}
 
     </div>
   );

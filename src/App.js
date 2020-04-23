@@ -21,7 +21,7 @@ function App() {
     <div className="App">
       <Text variant={"xxLarge"}>Meetjs Pizza draw</Text>
       <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
-        {token && <DrawInProgress token={token}/>}
+        {token && <DrawInProgress onReset={() => setToken('')} token={token}/>}
         {!token && <EnterDraw  onDrawEnter={setToken}/>}
       </div>
 
