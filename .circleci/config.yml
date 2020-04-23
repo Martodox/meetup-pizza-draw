@@ -11,8 +11,6 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-
-
   bump-version:
     machine:
       enabled: true
@@ -29,8 +27,6 @@ jobs:
       - run:
           name: Commit changes
           command: git push origin master
-            
-
   build-docker:
     docker:
       - image: circleci/node:12

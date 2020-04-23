@@ -9,10 +9,10 @@ function Footer() {
 
   return (
     <div>
-      <Text variant="large" className="Sponsor">
-        Food brought to you by:  <img alt="logo" className="Logo" src={logo}></img>
+      <Text className="Sponsor">
+        Hi there! It’s <a href="https://www.oanda.com/group/culture/job-openings/" target="_blank">Oanda Poland.</a> We’re new in town, but we’ve been operating in the fintech industry for 23 years globally. 
+        We target Kraków to be our second largest office. Let’s build this great thing together!
       </Text>
-      
     </div>
   );
 }

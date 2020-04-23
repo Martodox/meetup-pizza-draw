@@ -1,9 +1,11 @@
 .Sponsor {
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
 }
 .Logo {
-  width: 150px;
+  display: block;
+  width: 100px;
+  margin-top: 20px;
   padding-left: 10px;
 }
 
