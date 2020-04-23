@@ -38,6 +38,9 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Pull changed version
+          command: git pull origin $CIRCLE_BRANCH
+      - run:
           name: Build docker image
           command: | 
             VERSION=$(grep '"version":' package.json | cut -d\" -f4)
@@ -56,6 +59,9 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "78:b4:0f:da:25:00:3f:be:a4:f9:b8:63:5e:c7:73:33"
+      - run:
+          name: Pull changed version
+          command: git pull origin $CIRCLE_BRANCH
       - run:
           name: Deploy Over SSH
           command: |
