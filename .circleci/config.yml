@@ -40,13 +40,13 @@ jobs:
           name: Build docker image
           command: | 
             VERSION=$(grep '"version":' package.json | cut -d\" -f4)
-            docker build -t $DOCKER_IMAGE:$VERSION .
+            docker build -t $GITHUB_IMAGE_TAG:$VERSION .
       - run:
           name: Push docker image
           command: |
             VERSION=$(grep '"version":' package.json | cut -d\" -f4)
-            docker login -u martodox -p $DOCKER_HUB_TOKEN
-            docker push $DOCKER_IMAGE:$VERSION
+            echo "$GITHUB_PAT" | docker login -u $GITHUB_CONTAINER_LOGIN --password-stdin docker.pkg.github.com
+            docker push $GITHUB_IMAGE_TAG:$VERSION
   deploy:
     machine:
       enabled: true
@@ -62,7 +62,7 @@ jobs:
           name: Deploy Over SSH
           command: |
             VERSION=$(grep '"version":' package.json | cut -d\" -f4)
-            ssh $SSH_USER@$SSH_HOST  "./deploy-pizza.sh $DOCKER_IMAGE $VERSION pizzadraw"            
+            ssh $SSH_USER@$SSH_HOST  "./deploy-pizza.sh $GITHUB_IMAGE_TAG $VERSION pizzadraw"            
             
 workflows:
   version: 2
