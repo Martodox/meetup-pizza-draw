@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, Spinner, IconButton, Modal } from 'office-ui-fabric-react';
+import { Text, Spinner, SpinnerSize, IconButton, Modal, DefaultButton } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { useFirebase } from '../../useFirebase';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { WAITING, PROMPT } from '../../drawStages';
 
 
@@ -10,14 +10,26 @@ function BlikModal({hideModal, currentUser}) {
 
   const { firebase } = useFirebase();
 
-  const [value, loading, error] = useCollectionData(
-    firebase.firestore().collection(`tokens`).where("hasWon", "in", [PROMPT, WAITING]),
+  const [value, loading] = useDocumentData(
+    firebase.firestore().doc(`tokens/${currentUser}`),
     {
-      idField: "id",
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
+
   const cancelIcon = { iconName: 'Cancel' };
+
+    const PromptUser = () => {
+
+        const promptUser = () => {
+            firebase.firestore().doc(`tokens/${currentUser}`).set({
+                "hasWon": PROMPT
+            }, {merge: true});
+            
+        }
+
+        return <DefaultButton text="Promtp user" onClick={() => promptUser()} />
+    }
 
   return (
     <Modal
@@ -25,19 +37,21 @@ function BlikModal({hideModal, currentUser}) {
     onDismiss={hideModal}
     isBlocking={false}
   >
-    <div>
-      <span>Lorem Ipsum</span>
-      <IconButton
+    <IconButton
         iconProps={cancelIcon}
         ariaLabel="Close popup modal"
         onClick={hideModal}
       />
-    </div>
-    <div>
-      <p>
-      currentUser: {currentUser}
-      </p>
-    </div>
+      {loading && <Spinner size={SpinnerSize.large} />}
+      {!loading && 
+        <div>
+          {value.nickname}
+          
+          <PromptUser/>
+
+          
+        </div>
+        }
   </Modal>
   );
 }

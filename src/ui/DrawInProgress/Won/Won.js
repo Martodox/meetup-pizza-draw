@@ -1,6 +1,6 @@
 import React from 'react';
-
-
+import Prompt from '../Prompt/Prompt'
+import { PROMPT } from '../../../drawStages';
 
 import { Text, FontIcon, mergeStyles, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 
@@ -22,7 +22,7 @@ function Won({session}) {
             <div><FontIcon iconName="HeartFill" className={iconClass} /></div>
             <p><Text>Make sure you are on a payment page and wait for BLIK code to appear!</Text></p>
             <p><Text>Once it does enter it and wait for authorisation.</Text></p>
-
+            {session.hasWon === PROMPT && <Prompt/>}
             Your BLIK code: 
             {!session.blik && <Spinner size={SpinnerSize.large} />}
             {session.blik && <Text variant="xxLarge"> {session.blik}</Text>}
