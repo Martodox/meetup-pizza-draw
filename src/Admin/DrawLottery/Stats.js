@@ -10,16 +10,14 @@ const sumEntries = (array) => {
     return 0;
   }
 
-  return array.reduce((acc, val) => {
-    return acc + val.requestedAmount
-  }, 0)
+  return array.reduce((acc, val) => acc + Number(val.requestedAmount), 0)
 }
 
 function Stats() {
 
   const { firebase } = useFirebase();
 
-  const [value, loading, error] = useCollectionData(
+  const [value, loading] = useCollectionData(
     firebase.firestore().collection(`tokens`).where("hasWon", "in", [WON]),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
@@ -32,7 +30,7 @@ function Stats() {
       {!loading && value &&
         <Separator>
           <Text variant="large">
-            Total spend: {sumEntries(value)} PLN
+            Total spend: {sumEntries(value).toFixed(2)} PLN
           </Text>
         </Separator>
       }

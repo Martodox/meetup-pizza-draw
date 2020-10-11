@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, Spinner, SpinnerSize, List, ActionButton } from 'office-ui-fabric-react';
+import React, { useState } from 'react';
+import { Spinner, SpinnerSize, List, ActionButton } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { useFirebase } from '../../useFirebase';
 import BlikModal from './BlikModal';
@@ -46,20 +46,13 @@ function RemainingEntries() {
     setCurrentUser(id);
   }
 
-  const [value, loading, error] = useCollectionData(
+  const [value, loading] = useCollectionData(
     firebase.firestore().collection(`tokens`).where("hasWon", "in", [PROMPT, WAITING]),
     {
       idField: "id",
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
-
-  useEffect(() => {
-    if (value && Array.isArray(value)) {
-      pickUser(value[0].id)
-    }
-  }, [value, loading])
-
 
   return (
     <div>
