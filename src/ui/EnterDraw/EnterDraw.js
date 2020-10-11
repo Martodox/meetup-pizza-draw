@@ -18,11 +18,11 @@ function EnterDraw({onDrawEnter}) {
     db.collection("tokens").add({
       nickname,
       blik: "",
-      hasWon: WAITING
+      hasWon: WAITING,
+      requestedAmount: 0,
     }).then(document => onDrawEnter(document.id))
   }
 
-  
   return (
     <Fragment>
       <Text variant={"xLarge"}>Enter the draw</Text>

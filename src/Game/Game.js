@@ -9,14 +9,10 @@ import { Text } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 
 
-
-
 function Game() {
-
 
   const [ token, setToken ] = useLocalStorage("drawToken", "");
 
-  
   return (
     <div className="App">
       <Text variant={"xxLarge"}>Meetjs Pizza draw</Text>
@@ -32,8 +28,6 @@ function Game() {
       <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
         <Rules />
       </div>
-
-
 
     </div>
   );

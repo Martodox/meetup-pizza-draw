@@ -1,15 +1,41 @@
 import React from 'react';
+import { Text, Spinner, SpinnerSize, Separator } from 'office-ui-fabric-react';
 import { useFirebase } from '../../useFirebase';
-const { api, config } = useFirebase();
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { WON } from '../../drawStages';
 
+const sumEntries = (array) => {
 
+  if (!Array.isArray(array)) {
+    return 0;
+  }
 
+  return array.reduce((acc, val) => {
+    return acc + val.requestedAmount
+  }, 0)
+}
 
 function Stats() {
 
+  const { firebase } = useFirebase();
+
+  const [value, loading, error] = useCollectionData(
+    firebase.firestore().collection(`tokens`).where("hasWon", "in", [WON]),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
+
   return (
     <div>
-        Some table...
+      {loading && <Spinner size={SpinnerSize.large} />}
+      {!loading && value &&
+        <Separator>
+          <Text variant="large">
+            Total spend: {sumEntries(value)} PLN
+          </Text>
+        </Separator>
+      }
     </div>
   );
 }
