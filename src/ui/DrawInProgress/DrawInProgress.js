@@ -3,7 +3,7 @@ import './DrawInProgress.css';
 import Won from './Won/Won';
 import Lost from './Lost/Lost';
 import { useFirebase } from '../../useFirebase';
-import { WAITING, WON, NOTTHISTIME } from '../../drawStages';
+import { WAITING, WON, NOTTHISTIME, PROMPT } from '../../drawStages';
 
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 
