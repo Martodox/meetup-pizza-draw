@@ -1,0 +1,4 @@
+export const PING_INTERVAL=10000;
+
+export const TIME_SINCE_AWAY = PING_INTERVAL * 2.5
+export const TIME_SINCE_OFFLINE = PING_INTERVAL * 7

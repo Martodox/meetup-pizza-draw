@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Text, Spinner, SpinnerSize, IconButton, Modal, DefaultButton, ProgressIndicator } from 'office-ui-fabric-react';
+import React, { useState, memo } from 'react';
+import { Text, Spinner, SpinnerSize, IconButton, Modal, DefaultButton } from 'office-ui-fabric-react';
 import BlikCode from './BlikCode';
 import { useFirebase } from '../../useFirebase';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import WaitForBlikForm from './WaitForBlikForm';
 import { WAITING, PROMPT, WON, TIMEOUT } from '../../drawStages';
 import "./BlikModal.css";
 
 function BlikModal({ hideModal, currentUser }) {
-
   const { firebase } = useFirebase();
   const [ shouldStartWaiting, startWaiting ] = useState(false);
   const [value, loading] = useDocumentData(
@@ -33,45 +33,11 @@ function BlikModal({ hideModal, currentUser }) {
     return <DefaultButton text="Promtp user" onClick={() => promptUser()} />
   }
 
-  const WaitForBlikForm = () => {
-
-    const waitFor = 30000;
-    const [percentComplete, setPercentComplete] = useState(0);
-    const [now] = useState(Date.now());
-    const target = now + waitFor;
-    
-    
-
-    
-    useEffect(() => {
-      let intervalId = setInterval(async () => {
-        let completed = parseFloat((1 - ((target - Date.now()) / waitFor)).toFixed(2));        
-        
-        setPercentComplete(completed);
-
-        if (completed > 1) {
-          await firebase.firestore().doc(`tokens/${currentUser}`).set({
-            "hasWon": WON
-          }, { merge: true });
-    
-          startWaiting(false);
-        }
-
-      }, 100);
-      return () => {
-        clearInterval(intervalId);
-      };
-    });
-
-
-    return <ProgressIndicator label="Wait, user is being notified!" percentComplete={percentComplete} />
-
-  }
 
   return (
     <Modal
     containerClassName={"BlikModal"}
-      isOpen={true}
+      isOpen={!!currentUser}
       onDismiss={hideModal}
       isBlocking={false}
     >
@@ -86,8 +52,8 @@ function BlikModal({ hideModal, currentUser }) {
       {loading && <Spinner size={SpinnerSize.large} />}
       {!loading &&
         <div>
-          {value.hasWon === WAITING && <PromptUser />}
-          {shouldStartWaiting && <WaitForBlikForm />}
+          {[WAITING, PROMPT].includes(value.hasWon) && <PromptUser />}
+          {shouldStartWaiting && <WaitForBlikForm currentUser={currentUser} onWaitingDone={() => startWaiting(false)} />}
           {[WON, TIMEOUT].includes(value.hasWon) && <BlikCode currentUser={currentUser} hideModal={hideModal}/>}
 
 
@@ -97,4 +63,4 @@ function BlikModal({ hideModal, currentUser }) {
   );
 }
 
-export default BlikModal;
+export default memo(BlikModal)

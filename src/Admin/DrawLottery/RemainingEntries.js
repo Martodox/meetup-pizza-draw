@@ -1,73 +1,103 @@
-import React, { useState } from 'react';
-import { Spinner, SpinnerSize, List, ActionButton } from 'office-ui-fabric-react';
+import React, { useState, useEffect, memo } from 'react';
+import { Spinner, SpinnerSize, List, ActionButton, Pivot, PivotItem, PersonaSize, Persona, PersonaPresence } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { useFirebase } from '../../useFirebase';
-import BlikModal from './BlikModal';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { WAITING, PROMPT } from '../../drawStages';
 import "./RemainingEntries.css";
+import { TIME_SINCE_AWAY, TIME_SINCE_OFFLINE, PING_INTERVAL } from '../../consts';
 
-const shuffleArray = (sourceArray) => {
 
-  if (!Array.isArray(sourceArray)) {
-    return [];
-  }
+const isActive = (timeSince) => {
+  if (timeSince > TIME_SINCE_OFFLINE) return PersonaPresence.offline
+  if (timeSince > TIME_SINCE_AWAY) return PersonaPresence.away
 
-  let array = [...sourceArray];
-
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * i)
-    const temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-  return array;
+  return PersonaPresence.online
 }
 
-function ListElement({user, pickUser}) {
-  const icon = { iconName: 'Add' };
+const getStillInGameUsers = (users) => {
+
+  const now = Date.now()
+
+  return [
+    ...users.filter((user) => (now - user.lastUpdated) <= TIME_SINCE_AWAY),
+    ...users.filter((user) => (now - user.lastUpdated) <= TIME_SINCE_OFFLINE && (now - user.lastUpdated) > TIME_SINCE_AWAY),
+    ...users.filter((user) => (now - user.lastUpdated) > TIME_SINCE_OFFLINE),
+  ];
+}
+
+
+function ListElement({ user, pickUser }) {
+
+  const [, setTime] = useState(Date.now());
+  
+  useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), PING_INTERVAL / 2);
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
+  const icon = { iconName: 'MiniExpand' };
+  const examplePersona = {
+    text: user.nickname,
+    presence: isActive(Date.now() - user.lastUpdated),
+    size: PersonaSize.size40,
+    coinSize: 40
+  };
   return (
     <div className={"Cell"}>
-      <ActionButton iconProps={icon} text={`Choose: ${user.nickname}`} onClick={() => pickUser(user.id)} />
+      
+      <Persona {...examplePersona} size={PersonaSize.size40} />
+
+      <ActionButton iconProps={icon} text={`Open modal`} onClick={() => pickUser(user.id)} />
     </div>
   )
 }
 
-function RemainingEntries() {
+function RemainingEntries({ setCurrentUser }) {
 
   const { firebase } = useFirebase();
-  const [currentUser, setCurrentUser] = useState(null);
 
-  const hideModal = () => {
-    setCurrentUser(null);
-  }
+
 
   const pickUser = (id) => {
     setCurrentUser(id);
   }
 
   const [value, loading] = useCollectionData(
-    firebase.firestore().collection(`tokens`).where("hasWon", "in", [PROMPT, WAITING]),
+    firebase.firestore().collection(`tokens`),
     {
       idField: "id",
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
 
+
   return (
     <div>
       {loading && <Spinner size={SpinnerSize.large} />}
-      {!!currentUser && <BlikModal hideModal={hideModal} currentUser={currentUser}/>}
       {!loading && value &&
         <div style={{ boxShadow: Depths.depth4 }}>
-          <List
-            items={shuffleArray(value)}
-            onRenderCell={(user) => <ListElement user={user} pickUser={pickUser}/>}
-          />
+          <Pivot aria-label="Basic Pivot Example">
+            <PivotItem headerText="Still in game">
+              <List
+                items={getStillInGameUsers(value.filter(val => [WAITING, PROMPT].includes(val.hasWon)))}
+                onRenderCell={(user) => <ListElement user={user} pickUser={pickUser} />}
+              />
+            </PivotItem>
+            <PivotItem headerText="Archive">
+              <List
+                items={value.filter(val => ![WAITING, PROMPT].includes(val.hasWon))}
+                onRenderCell={(user) => <ListElement user={user} pickUser={pickUser} />}
+              />
+            </PivotItem>
+          </Pivot>
+
         </div>
       }
     </div>
   );
 }
 
-export default RemainingEntries;
+export default memo(RemainingEntries);

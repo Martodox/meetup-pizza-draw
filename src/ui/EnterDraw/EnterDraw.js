@@ -20,6 +20,7 @@ function EnterDraw({onDrawEnter}) {
       blik: "",
       hasWon: WAITING,
       requestedAmount: 0,
+      lastUpdated: Date.now(),
     }).then(document => onDrawEnter(document.id))
   }
 
