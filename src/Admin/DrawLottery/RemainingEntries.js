@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, Spinner, SpinnerSize, List, ActionButton } from 'office-ui-fabric-react';
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { useFirebase } from '../../useFirebase';
@@ -54,6 +54,11 @@ function RemainingEntries() {
     }
   );
 
+  useEffect(() => {
+    if (value && Array.isArray(value)) {
+      pickUser(value[0].id)
+    }
+  }, [value, loading])
 
 
   return (
