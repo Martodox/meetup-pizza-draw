@@ -14,7 +14,7 @@ const sumEntries = (array) => {
 }
 
 function Stats() {
-
+  
   const { firebase } = useFirebase();
 
   const [value, loading] = useCollectionData(
