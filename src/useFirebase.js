@@ -15,6 +15,8 @@ var config = {
 
 export function useFirebase() {
     return {
-        firebase: !firebase.apps.length ? firebase.initializeApp(config) : firebase.app()
+        firebase: !firebase.apps.length ? firebase.initializeApp(config) : firebase.app(),
+        api: firebase,
+        config
     }
 }

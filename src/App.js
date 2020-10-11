@@ -1,41 +1,34 @@
 import React from 'react';
-import './App.css';
-import { useLocalStorage } from './useLocalStorage';
-import DrawInProgress from './ui/DrawInProgress/DrawInProgress';
-import EnterDraw from './ui/EnterDraw/EnterDraw'
-import Rules from './ui/Rules/Rules';
-import Footer from './ui/Footer/Footer';
-import { Text } from 'office-ui-fabric-react';
-import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
+import Game from './Game/Game';
+import Admin from './Admin/Admin';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 
 
 
 
 function App() {
-
-
-  const [ token, setToken ] = useLocalStorage("drawToken", "");
-
   
   return (
-    <div className="App">
-      <Text variant={"xxLarge"}>Meetjs Pizza draw</Text>
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
-        {token && <DrawInProgress onReset={() => setToken('')} token={token}/>}
-        {!token && <EnterDraw  onDrawEnter={setToken}/>}
+    
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/console">
+            <Admin />
+          </Route>
+          <Route path="/">
+            <Game />
+          </Route>
+        </Switch>
       </div>
+    </Router>
 
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
-        <Footer />
-      </div>
-
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
-        <Rules />
-      </div>
-
-
-
-    </div>
   );
 }
 
