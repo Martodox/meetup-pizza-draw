@@ -21,13 +21,11 @@ function Dashboard({ user }) {
                     text={user.displayName}
                     secondaryText={user.email}
                     size={PersonaSize.size56}
-                    imageAlt="Annie Lindqvist, status is online"
                 />
                 <DefaultButton text="Logout" onClick={logout} />
             </div>
-            <RemainingEntries />
-
             <Stats />
+            <RemainingEntries />
         </div>
     );
 }
