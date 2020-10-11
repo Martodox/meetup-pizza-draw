@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import useSound from 'use-sound';
 import prompt from './notification.mp3'
 
@@ -19,7 +19,7 @@ function Prompt() {
                 clearInterval(interval);
             }
         }
-    }, [duration])
+    }, [duration, play])
     
   return null;
 }

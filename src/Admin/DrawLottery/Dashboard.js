@@ -4,7 +4,7 @@ import { useFirebase } from '../../useFirebase';
 import RemainingEntries from './RemainingEntries';
 import Stats from './Stats';
 
-const { api, config } = useFirebase();
+const { api } = useFirebase();
 
 
 function Dashboard({ user }) {
