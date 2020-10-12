@@ -39,8 +39,9 @@ function ListElement({ user, pickUser }) {
   });
 
   const icon = { iconName: 'MiniExpand' };
-  const examplePersona = {
+  const persona = {
     text: user.nickname,
+    secondaryText: user.hasWon === PROMPT ? "Draw in progress" : `${user.hasWon} - ${user.requestedAmount}`,
     presence: isActive(Date.now() - user.lastUpdated),
     size: PersonaSize.size40,
     coinSize: 40
@@ -48,7 +49,7 @@ function ListElement({ user, pickUser }) {
   return (
     <div className={"Cell"}>
       
-      <Persona {...examplePersona} size={PersonaSize.size40} />
+      <Persona {...persona} size={PersonaSize.size40} />
 
       <ActionButton iconProps={icon} text={`Open modal`} onClick={() => pickUser(user.id)} />
     </div>

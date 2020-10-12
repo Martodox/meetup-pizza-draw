@@ -6,26 +6,27 @@ import EnterDraw from '../ui/EnterDraw/EnterDraw'
 import Rules from '../ui/Rules/Rules';
 import Footer from '../ui/Footer/Footer';
 import { Text } from 'office-ui-fabric-react';
-import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
-
+import Baner from './baner.jpg';
 
 function Game() {
 
-  const [ token, setToken ] = useLocalStorage("drawToken", "");
+  const [ token, setToken ] = useLocalStorage(`drawToken${new Date().getFullYear()}${new Date().getUTCMonth()}`, "");
 
   return (
-    <div className="App">
-      <Text variant={"xxLarge"}>Meetjs Pizza draw</Text>
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
+    <div className="App">    
+      <Text className="Font_Color" variant={"xxLarge"}>OANDA Pizza draw</Text>
+      <div className="Gradient_Bar"/>
+      <img className="Banner" src={Baner}/>
+      <div className="App_Wrapper">
         {token && <DrawInProgress onReset={() => setToken('')} token={token}/>}
         {!token && <EnterDraw  onDrawEnter={setToken}/>}
       </div>
-
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
+      <div className="Gradient_Bar"/>
+      <div className="App_Wrapper Font_Color">
         <Footer />
       </div>
-
-      <div className="App_Wrapper" style={{ boxShadow: Depths.depth4 }}>
+      <div className="Gradient_Bar"/>
+      <div className="App_Wrapper Font_Color">
         <Rules />
       </div>
 
