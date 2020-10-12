@@ -7,11 +7,10 @@ function Rules() {
 
   return (
     <div>
-        <Text variant={"xLarge"}>Live coding</Text>
       <Text variant={"xLarge"}>Rules</Text>
       <Text variant={"medium"}>
         <p>
-          It is not easy to host a pizza meetup online. In order to achieve that we will be using <a href="https://blikmobile.pl/">BLIK</a> codes to authorise all payments.
+          It is not easy to host a pizza meetup online. In order to achieve that we will be using <a href="https://blikmobile.pl/" target="_blank" rel="noopener noreferrer">BLIK</a> codes to authorise all payments.
         </p>
         <p>
           Main reason behind this app and BLIK codes is that <b>we don't want to collect and process ANY personal information</b>. We are not using cookies and we don't track anyone using this app.
@@ -39,8 +38,10 @@ function Rules() {
       </Text>
 
       <Text variant={"medium"}>
+      <p>
+          Since we are using BLIK it is very hard to verify if what you are ordering is really a pizza or other food.
+        </p>
         <p>
-          Since we are using BLIK it is very hard to verify if what you are ordering is really a pizza or other food. 
           <b>We trust</b> your judgment and believe that this event will be used in good faith :)
         </p>
       </Text>

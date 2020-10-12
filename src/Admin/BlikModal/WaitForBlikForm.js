@@ -8,7 +8,7 @@ import "./BlikModal.css";
 const WaitForBlikForm = ({currentUser, onWaitingDone}) => {
   const { firebase } = useFirebase();
 
-  const waitFor = 20000;
+  const waitFor = 10000;
   const [percentComplete, setPercentComplete] = useState(0);
   const [now] = useState(Date.now());
   const target = now + waitFor;

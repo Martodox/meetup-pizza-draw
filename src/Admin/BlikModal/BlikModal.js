@@ -33,18 +33,29 @@ function BlikModal({ hideModal, currentUser }) {
     return <DefaultButton text="Promtp user" onClick={() => promptUser()} />
   }
 
+  const triggerHideModal = () =>{
+
+    if (value.hasWon === PROMPT) {
+      firebase.firestore().doc(`tokens/${currentUser}`).set({
+        "hasWon": WAITING
+      }, { merge: true });
+    }
+
+    hideModal();
+  }
+
 
   return (
     <Modal
     containerClassName={"BlikModal"}
       isOpen={!!currentUser}
-      onDismiss={hideModal}
+      onDismiss={triggerHideModal}
       isBlocking={false}
     >
       <IconButton
         iconProps={cancelIcon}
         ariaLabel="Close popup modal"
-        onClick={hideModal}
+        onClick={triggerHideModal}
       />
       <Text>
         {value && value.nickname}
@@ -52,9 +63,9 @@ function BlikModal({ hideModal, currentUser }) {
       {loading && <Spinner size={SpinnerSize.large} />}
       {!loading &&
         <div>
-          {[WAITING, PROMPT].includes(value.hasWon) && <PromptUser />}
+          <PromptUser />
           {shouldStartWaiting && <WaitForBlikForm currentUser={currentUser} onWaitingDone={() => startWaiting(false)} />}
-          {[WON, TIMEOUT].includes(value.hasWon) && <BlikCode currentUser={currentUser} hideModal={hideModal}/>}
+          {[WON, TIMEOUT].includes(value.hasWon) && <BlikCode currentUser={currentUser} hideModal={triggerHideModal}/>}
 
 
         </div>
