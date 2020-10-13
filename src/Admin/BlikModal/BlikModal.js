@@ -1,53 +1,56 @@
-import React, { useState, memo } from 'react';
-import { Text, Spinner, SpinnerSize, IconButton, Modal, DefaultButton } from 'office-ui-fabric-react';
+import React, {useState, memo} from 'react';
+import {Text, Spinner, SpinnerSize, IconButton, Modal, DefaultButton} from 'office-ui-fabric-react';
 import BlikCode from './BlikCode';
-import { useFirebase } from '../../useFirebase';
+import {useFirebase} from '../../useFirebase';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import WaitForBlikForm from './WaitForBlikForm';
-import { WAITING, PROMPT, WON, TIMEOUT } from '../../drawStages';
-import "./BlikModal.css";
+import {WAITING, PROMPT, WON, TIMEOUT} from '../../drawStages';
+import './BlikModal.css';
 
-function BlikModal({ hideModal, currentUser }) {
-  const { firebase } = useFirebase();
-  const [ shouldStartWaiting, startWaiting ] = useState(false);
+function BlikModal({hideModal, currentUser}) {
+  const {firebase} = useFirebase();
+  const [shouldStartWaiting, startWaiting] = useState(false);
   const [value, loading] = useDocumentData(
-    firebase.firestore().doc(`tokens/${currentUser}`),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
+      firebase.firestore().doc(`tokens/${currentUser}`),
+      {
+
+
+        snapshotListenOptions: { includeMetadataChanges: true},
+      },
   );
 
-  const cancelIcon = { iconName: 'Cancel' };
+
+
+  const cancelIcon = {iconName: 'Cancel'};
+
+
 
   const PromptUser = () => {
-
     const promptUser = async () => {
       await firebase.firestore().doc(`tokens/${currentUser}`).set({
-        "hasWon": PROMPT
-      }, { merge: true });
+        'hasWon': PROMPT,
+      }, {merge: true});
 
       startWaiting(true);
+    };
 
-    }
-
-    return <DefaultButton text="Promtp user" onClick={() => promptUser()} />
-  }
+    return <DefaultButton text="Promtp user" onClick={() => promptUser()} />;
+  };
 
   const triggerHideModal = () =>{
-
     if (value.hasWon === PROMPT) {
       firebase.firestore().doc(`tokens/${currentUser}`).set({
-        "hasWon": WAITING
-      }, { merge: true });
+        'hasWon': WAITING,
+      }, {merge: true});
     }
 
     hideModal();
-  }
+  };
 
 
   return (
     <Modal
-    containerClassName={"BlikModal"}
+      containerClassName={'BlikModal'}
       isOpen={!!currentUser}
       onDismiss={triggerHideModal}
       isBlocking={false}
@@ -74,4 +77,4 @@ function BlikModal({ hideModal, currentUser }) {
   );
 }
 
-export default memo(BlikModal)
+export default memo(BlikModal);

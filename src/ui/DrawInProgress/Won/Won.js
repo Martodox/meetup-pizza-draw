@@ -1,8 +1,8 @@
 import React from 'react';
-import Prompt from '../Prompt/Prompt'
-import { PROMPT, TIMEOUT } from '../../../drawStages';
+import Prompt from '../Prompt/Prompt';
+import {PROMPT, TIMEOUT} from '../../../drawStages';
 
-import { Text, FontIcon, mergeStyles, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import {Text, FontIcon, mergeStyles, Spinner, SpinnerSize} from 'office-ui-fabric-react';
 
 const iconClass = mergeStyles({
   fontSize: 50,
@@ -12,15 +12,11 @@ const iconClass = mergeStyles({
 });
 
 
-function Won({ session }) {
-
-
-
+function Won({session}) {
   return (
     <div>
       {session.hasWon === PROMPT && <Prompt />}
       <Text variant="large">Congratulations {session.nickname}!</Text>
-
 
 
       {session.hasWon !== TIMEOUT &&
@@ -40,9 +36,6 @@ function Won({ session }) {
           <Text>Your two minutes are up</Text>
         </div>
       }
-
-
-
 
 
     </div>

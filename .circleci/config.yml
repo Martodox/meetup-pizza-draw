@@ -11,6 +11,17 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+  lint-interface:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run:
+          name: Instal dependencies
+          command: npm ci
+      - run:
+          name: Run lint
+          command: npm run lint          
   bump-version:
     machine:
       enabled: true
@@ -71,12 +82,14 @@ workflows:
 
     jobs:
       - test-interface
+      - lint-interface
       - bump-version:
           filters:
             branches:
               only: master
           requires:
             - test-interface
+            - lint-interface
       - build-docker:
           filters:
             branches:
