@@ -6,6 +6,7 @@ function Rules() {
   return (
     <div>
       <Text variant={'xLarge'}>Rules</Text>
+      <Text variant={'xLarge'}>Rules II</Text>
       <Text variant={'medium'}>
         <p>
           It is not easy to host a pizza meetup online. In order to achieve that we will be using <a href="https://blikmobile.pl/" target="_blank" rel="noopener noreferrer">BLIK</a> codes to authorise all payments.
