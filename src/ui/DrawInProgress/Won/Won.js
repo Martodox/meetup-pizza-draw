@@ -9,6 +9,7 @@ const iconClass = mergeStyles({
   height: 50,
   width: 50,
   margin: '25px',
+  color: "#21CE99"
 });
 
 
